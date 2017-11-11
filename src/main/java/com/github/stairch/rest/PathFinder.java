@@ -22,7 +22,7 @@ public class PathFinder {
 
     public SnakeDTO getOwnSnake(String ownSnake, List<SnakeDTO> allSnakes){
         for(SnakeDTO snake : allSnakes){
-            if(snake.getId() == ownSnake){
+            if(snake.getId().equals(ownSnake)){
                 return snake;
             }
         }

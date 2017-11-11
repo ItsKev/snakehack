@@ -54,8 +54,20 @@ public class SnakeService {
     public final Response move(String string) {
         MoveRequestDTO moveRequestDTO = this.getMoveRequestDTO(string);
 
+        PathFinder pathFinder = new PathFinder(moveRequestDTO.getWidth(), moveRequestDTO.getHeight());
+
         final MoveResponseDTO moveResponse = new MoveResponseDTO();
-        moveResponse.setMove(Move.right);
+        SnakeDTO ownSnake = pathFinder.getOwnSnake(moveRequestDTO.getYou(), moveRequestDTO.getSnakes());
+        PointDTO closestFood = pathFinder.getClosestFood(ownSnake, moveRequestDTO.getFood());
+        Move move = pathFinder.moveToFood(ownSnake, closestFood, moveRequestDTO.getSnakes());
+
+        if(move != null){
+            moveResponse.setMove(move);
+        }
+        else{
+            moveResponse.setMove(Move.right);
+        }
+
 
 
         final String responseBody = gson.toJson(moveResponse);
