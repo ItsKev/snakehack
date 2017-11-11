@@ -71,6 +71,8 @@ public class PathFinder {
 
     public Move moveToFood(SnakeDTO ownSnake, PointDTO Food, List<SnakeDTO> allSnakes){
 
+        this.xTried = false;
+        this.yTried = false;
         PointDTO ownHead = new PointDTO();
 
         ownHead.setX(ownSnake.getCoordinates().get(0).getX());
