@@ -89,7 +89,6 @@ public class PathFinder {
         }
 
 
-        PointDTO failSave = ownHead;
 
         if (distX > distY){
             xTried = true;
@@ -171,7 +170,7 @@ public class PathFinder {
                 }
             }
         }
-        return moveX(ownHead, Food, allSnakes);
+        return moveY(ownHead, Food, allSnakes);
     }
 
     public boolean pointIsFree(PointDTO target, List<SnakeDTO> allSnakes){
