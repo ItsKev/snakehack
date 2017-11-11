@@ -11,6 +11,8 @@ public class PathFinder {
 
     private int fieldWidth;
     private int fieldHeight;
+    private boolean xTried = false;
+    private boolean yTried = false;
 
     public PathFinder(final int fieldWidth, final int fieldHeight){
         this.fieldWidth = fieldWidth;
@@ -68,9 +70,12 @@ public class PathFinder {
     }
 
     public Move moveToFood(SnakeDTO ownSnake, PointDTO Food, List<SnakeDTO> allSnakes){
-        int counter = 0;
-        PointDTO[] snake;
-        PointDTO ownHead = ownSnake.getCoordinates().get(0);
+
+        PointDTO ownHead = new PointDTO();
+
+        ownHead.setX(ownSnake.getCoordinates().get(0).getX());
+        ownHead.setY(ownSnake.getCoordinates().get(0).getY());
+
 
         int distX = Food.getX() - ownHead.getX();
         if (distX < 0) {
@@ -81,43 +86,85 @@ public class PathFinder {
             distY *= (-1);
         }
 
-        boolean isPositiv;
+
+        PointDTO failSave = ownHead;
 
         if (distX > distY){
-            PointDTO nextX = ownHead;
-            if(Food.getX() - ownHead.getX() < 0){
-                nextX.setX(ownHead.getX()-1);
-                isPositiv = false;
-            }else{
-                nextX.setX(ownHead.getX()+1);
-                isPositiv = true;
-            }
-            boolean pointIsFree = pointIsFree(nextX, allSnakes);
-
-            if (isPositiv && pointIsFree){
-                return Move.left;
-            }else if (!isPositiv && pointIsFree){
-                return Move.right;
-            }
+            xTried = true;
+            return this.moveX(ownHead,Food,allSnakes);
         }else {
-            PointDTO nextY = ownHead;
-            if(Food.getY() - ownHead.getY() < 0){
-                nextY.setY(ownHead.getY()-1);
-                isPositiv = false;
-            }else{
-                nextY.setY(ownHead.getY()+1);
-                isPositiv = true;
-            }
-            boolean pointIsFree = pointIsFree(nextY, allSnakes);
+            yTried = true;
+            return this.moveY(ownHead, Food, allSnakes);
+        }
+    }
 
-            if (isPositiv && pointIsFree){
-                return Move.down;
-            }else if (!isPositiv && pointIsFree){
-                return Move.up;
+    private Move moveY(PointDTO ownHead, PointDTO Food, List<SnakeDTO> allSnakes) {
+        boolean isPositiv;
+        PointDTO nextY = ownHead;
+        if (Food.getY() - ownHead.getY() < 0) {
+            nextY.setY(ownHead.getY() - 1);
+            isPositiv = false;
+        } else {
+            nextY.setY(ownHead.getY() + 1);
+            isPositiv = true;
+        }
+        boolean pointIsFree = this.pointIsFree(nextY, allSnakes);
+
+        if (isPositiv && pointIsFree) {
+            return Move.down;
+        } else if (!isPositiv && pointIsFree) {
+            return Move.up;
+        } else if (xTried) {
+            if (isPositiv) {
+                nextY.setY(ownHead.getY() - 2);
+                if (this.pointIsFree(nextY, allSnakes)) {
+                    return Move.up;
+                } else {
+                    nextY.setY(ownHead.getX() + 2);
+                    if (this.pointIsFree(nextY, allSnakes)) {
+                        return Move.down;
+                    }
+                }
             }
         }
+        return this.moveX(ownHead, Food, allSnakes);
+    }
 
-        return null;
+
+
+
+
+
+    private Move moveX(PointDTO ownHead, PointDTO Food, List<SnakeDTO> allSnakes) {
+        boolean isPositiv;
+        PointDTO nextX = ownHead;
+        if(Food.getX() - ownHead.getX() > 0){
+            nextX.setX(ownHead.getX()-1);
+            isPositiv = false;
+        }else{
+            nextX.setX(ownHead.getX()+1);
+            isPositiv = true;
+        }
+        boolean pointIsFree = pointIsFree(nextX, allSnakes);
+
+        if (isPositiv && pointIsFree){
+            return Move.right;
+        }else if (!isPositiv && pointIsFree){
+            return Move.left;
+        }else if (xTried) {
+            if (isPositiv) {
+                nextX.setX(ownHead.getX() - 2);
+                if (this.pointIsFree(nextX, allSnakes)) {
+                    return Move.left;
+                }
+            } else {
+                nextX.setX(ownHead.getX() + 2);
+                if (this.pointIsFree(nextX, allSnakes)) {
+                    return Move.right;
+                }
+            }
+        }
+        return moveX(ownHead, Food, allSnakes);
     }
 
     public boolean pointIsFree(PointDTO target, List<SnakeDTO> allSnakes){
