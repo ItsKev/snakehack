@@ -103,25 +103,25 @@ public class PathFinder {
 
     private Move moveY1(PointDTO ownHead, PointDTO Food, List<SnakeDTO> allSnakes) {
         boolean direction = directionIsFree(this.ownSnake,allSnakes);
-        boolean isPositiv;
+        boolean aboveFood;
         PointDTO nextY = new PointDTO();
         nextY.setX(ownHead.getX());
         nextY.setY(ownHead.getY());
         if (Food.getY() - ownHead.getY() < 0) {
             nextY.setY(ownHead.getY() - 1);
-            isPositiv = false;
+            aboveFood = false;
         } else {
             nextY.setY(ownHead.getY() + 1);
-            isPositiv = true;
+            aboveFood = true;
         }
         boolean pointIsFree = this.pointIsFree(nextY, allSnakes);
 
-        if (isPositiv && pointIsFree && direction) {
+        if (aboveFood && pointIsFree && direction) {
             return Move.down;
-        } else if (!isPositiv && pointIsFree && direction) {
+        } else if (!aboveFood && pointIsFree && direction) {
             return Move.up;
         } else if (this.xTried1) {
-            if (isPositiv) {
+            if (aboveFood) {
                 nextY.setY(ownHead.getY() - 1);
                 if (this.pointIsFree(nextY, allSnakes)) {
                     return Move.up;
@@ -140,25 +140,26 @@ public class PathFinder {
     }
 
     private Move moveY2(PointDTO ownHead, PointDTO Food, List<SnakeDTO> allSnakes) {
-        boolean isPositiv;
+        yTried2 = true;
+        boolean aboveFood;
         PointDTO nextY = new PointDTO();
         nextY.setX(ownHead.getX());
         nextY.setY(ownHead.getY());
         if (Food.getY() - ownHead.getY() < 0) {
             nextY.setY(ownHead.getY() - 1);
-            isPositiv = false;
+            aboveFood = false;
         } else {
             nextY.setY(ownHead.getY() + 1);
-            isPositiv = true;
+            aboveFood = true;
         }
         boolean pointIsFree = this.pointIsFree(nextY, allSnakes);
 
-        if (isPositiv && pointIsFree) {
+        if (aboveFood && pointIsFree) {
             return Move.down;
-        } else if (!isPositiv && pointIsFree) {
+        } else if (!aboveFood && pointIsFree) {
             return Move.up;
         } else if (this.xTried1) {
-            if (isPositiv) {
+            if (aboveFood) {
                 nextY.setY(ownHead.getY() - 1);
                 if (this.pointIsFree(nextY, allSnakes)) {
                     return Move.up;
@@ -179,28 +180,28 @@ public class PathFinder {
 
     private Move moveX1(PointDTO ownHead, PointDTO Food, List<SnakeDTO> allSnakes) {
         boolean direction = directionIsFree(this.ownSnake,allSnakes);
-        boolean isPositiv;
+        boolean leftOfFood;
         PointDTO nextX = new PointDTO();
         nextX.setX(ownHead.getX());
         nextX.setY(ownHead.getY());
 
         if (Food.getX() - ownHead.getX() < 0) {
             nextX.setX(ownHead.getX() - 1);
-            isPositiv = false;
+            leftOfFood = false;
         } else {
             nextX.setX(ownHead.getX() + 1);
-            isPositiv = true;
+            leftOfFood = true;
         }
         boolean pointIsFree = pointIsFree(nextX, allSnakes);
 
-        if (isPositiv && pointIsFree && direction) {
+        if (leftOfFood && pointIsFree && direction) {
 
                 return Move.right;
 
-        } else if (!isPositiv && pointIsFree) {
+        } else if (!leftOfFood && pointIsFree) {
             return Move.left;
         } else if (this.yTried1) {
-            if (isPositiv) {
+            if (leftOfFood) {
                 nextX.setX(ownHead.getX() - 1);
                 if (this.pointIsFree(nextX, allSnakes) && direction) {
                     return Move.left;
@@ -219,28 +220,29 @@ public class PathFinder {
     }
 
     private Move moveX2(PointDTO ownHead, PointDTO Food, List<SnakeDTO> allSnakes) {
-        boolean isPositiv;
+        xTried2 = true;
+        boolean leftOfFood;
         PointDTO nextX = new PointDTO();
         nextX.setX(ownHead.getX());
         nextX.setY(ownHead.getY());
 
         if (Food.getX() - ownHead.getX() < 0) {
             nextX.setX(ownHead.getX() - 1);
-            isPositiv = false;
+            leftOfFood = false;
         } else {
             nextX.setX(ownHead.getX() + 1);
-            isPositiv = true;
+            leftOfFood = true;
         }
         boolean pointIsFree = pointIsFree(nextX, allSnakes);
 
-        if (isPositiv && pointIsFree) {
+        if (leftOfFood && pointIsFree) {
             if(directionIsFree(this.ownSnake,allSnakes)) {
                 return Move.right;
             }
-        } else if (!isPositiv && pointIsFree) {
+        } else if (!leftOfFood && pointIsFree) {
             return Move.left;
         } else if (this.yTried1) {
-            if (isPositiv) {
+            if (leftOfFood) {
                 nextX.setX(ownHead.getX() - 1);
                 if (this.pointIsFree(nextX, allSnakes)) {
                     return Move.left;
@@ -292,13 +294,13 @@ public class PathFinder {
         if (head.getX() == neck.getX()) {
 
             boolean topSide = false;
-            boolean botSide = false;
             int y = head.getY() - 1;
             int i = 0;
             while (y >= 0 && i <= 4) {
                 workPoint.setY(y);
                 if (this.pointIsFree(workPoint, allSnakes)) {
                     topSide = true;
+                    break;
                 }
                 y--;
                 i++;
@@ -316,6 +318,33 @@ public class PathFinder {
                     i++;
                 }
             }
+        }else{
+            boolean leftSide = false;
+            int x = head.getX() - 1;
+            int i = 0;
+            while (x >= 0 && i <= 4) {
+                workPoint.setX(x);
+                if (this.pointIsFree(workPoint, allSnakes)) {
+                    leftSide = true;
+                    break;
+                }
+                x--;
+                i++;
+            }
+            if (leftSide) {
+                workPoint.setX(head.getX());
+                x = (head.getY() + 1);
+                i = 0;
+                while (x <= this.fieldWidth && i <= 4) {
+                    workPoint.setX(x);
+                    if (this.pointIsFree(workPoint, allSnakes)) {
+                        return false;
+                    }
+                    x++;
+                    i++;
+                }
+            }
+
         }
         return true;
     }
