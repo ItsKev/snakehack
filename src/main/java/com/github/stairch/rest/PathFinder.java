@@ -114,7 +114,7 @@ public class PathFinder {
             return Move.down;
         } else if (!isPositiv && pointIsFree) {
             return Move.up;
-        } else if (xTried) {
+        } else if (this.xTried) {
             if (isPositiv) {
                 nextY.setY(ownHead.getY() - 2);
                 if (this.pointIsFree(nextY, allSnakes)) {
@@ -151,7 +151,7 @@ public class PathFinder {
             return Move.right;
         }else if (!isPositiv && pointIsFree){
             return Move.left;
-        }else if (xTried) {
+        }else if (this.yTried) {
             if (isPositiv) {
                 nextX.setX(ownHead.getX() - 2);
                 if (this.pointIsFree(nextX, allSnakes)) {
