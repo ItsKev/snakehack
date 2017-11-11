@@ -119,11 +119,11 @@ public class PathFinder {
             return Move.up;
         } else if (this.xTried) {
             if (isPositiv) {
-                nextY.setY(ownHead.getY() - 2);
+                nextY.setY(ownHead.getY() - 1);
                 if (this.pointIsFree(nextY, allSnakes)) {
                     return Move.up;
                 } else {
-                    nextY.setY(ownHead.getX() + 2);
+                    nextY.setY(ownHead.getY() + 1);
                     if (this.pointIsFree(nextY, allSnakes)) {
                         return Move.down;
                     }
@@ -159,12 +159,12 @@ public class PathFinder {
             return Move.left;
         }else if (this.yTried) {
             if (isPositiv) {
-                nextX.setX(ownHead.getX() - 2);
+                nextX.setX(ownHead.getX() - 1);
                 if (this.pointIsFree(nextX, allSnakes)) {
                     return Move.left;
                 }
             } else {
-                nextX.setX(ownHead.getX() + 2);
+                nextX.setX(ownHead.getX() + 1);
                 if (this.pointIsFree(nextX, allSnakes)) {
                     return Move.right;
                 }
