@@ -26,7 +26,7 @@ public class RestInPeace {
       protocol = "http://";
       host = Optional.ofNullable(System.getenv("HOSTNAME"));
       port = Optional.ofNullable(System.getenv("PORT"));
-        BASE_URI = protocol + host.orElse("0.0.0.0") + ":" + port.orElse("4242") + "/" ;
+      BASE_URI = protocol + host.orElse("0.0.0.0") + ":" + port.orElse("4242") + "/" ;
     }
     
     /**
