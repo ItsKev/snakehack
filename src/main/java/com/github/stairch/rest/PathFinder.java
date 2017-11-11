@@ -38,7 +38,7 @@ public class PathFinder {
         if (listLength > 1)
         {
             //get x,y Coordinates from ownSnake
-            PointDTO ownSnakeHeadPosition = ownSnake.getCoords().get(0);
+            PointDTO ownSnakeHeadPosition = ownSnake.getCoordinates().get(0);
             int ownSnakeX = ownSnakeHeadPosition.getX();
             int ownSnakeY = ownSnakeHeadPosition.getY();
             for(int i = 0; i < listLength; i++){
@@ -70,7 +70,7 @@ public class PathFinder {
     public Move moveToFood(SnakeDTO ownSnake, PointDTO Food, List<SnakeDTO> allSnakes){
         int counter = 0;
         PointDTO[] snake;
-        PointDTO ownHead = ownSnake.getCoords().get(0);
+        PointDTO ownHead = ownSnake.getCoordinates().get(0);
 
         int distX = Food.getX() - ownHead.getX();
         if (distX < 0) {
@@ -81,9 +81,9 @@ public class PathFinder {
             distY *= (-1);
         }
 
+        boolean isPositiv;
 
-        if (distX > distY{
-            boolean isPositiv;
+        if (distX > distY){
             PointDTO nextX = ownHead;
             if(Food.getX() - ownHead.getX() < 0){
                 nextX.setX(ownHead.getX()-1);
@@ -92,22 +92,38 @@ public class PathFinder {
                 nextX.setX(ownHead.getX()+1);
                 isPositiv = true;
             }
-            boolean pointIsFree = pointIsFree(nextX, allSnakes, this.fieldWidth, this.fieldHeight);
+            boolean pointIsFree = pointIsFree(nextX, allSnakes);
 
-            switch (Food.getX() - ownHead.getX()){
-                case < 0{
+            if (isPositiv && pointIsFree){
+                return Move.left;
+            }else if (!isPositiv && pointIsFree){
+                return Move.right;
+            }
+        }else {
+            PointDTO nextY = ownHead;
+            if(Food.getY() - ownHead.getY() < 0){
+                nextY.setY(ownHead.getY()-1);
+                isPositiv = false;
+            }else{
+                nextY.setY(ownHead.getY()+1);
+                isPositiv = true;
+            }
+            boolean pointIsFree = pointIsFree(nextY, allSnakes);
 
-                }
+            if (isPositiv && pointIsFree){
+                return Move.down;
+            }else if (!isPositiv && pointIsFree){
+                return Move.up;
             }
         }
 
         return null;
     }
 
-    public boolean pointIsFree(PointDTO target, List<SnakeDTO> allSnakes, int fieldWidth, int fieldHeight){
-        if(target.getX() > fieldWidth ||   //out of Field
+    public boolean pointIsFree(PointDTO target, List<SnakeDTO> allSnakes){
+        if(target.getX() > this.fieldWidth ||   //out of Field
                 target.getX() < 0 ||
-                target.getY() > fieldHeight ||
+                target.getY() > this.fieldHeight ||
                 target.getY() < 0){
             return false;
         }
@@ -121,7 +137,7 @@ public class PathFinder {
     public List<PointDTO> getOccupiedFields(List<SnakeDTO> snakes){
         List<PointDTO> occupiedPoints = new ArrayList<>();
         for(SnakeDTO snake : snakes){
-            for(PointDTO point : snake.getCoordsAsPoints()){
+            for(PointDTO point : snake.getCoordinates()){
                 occupiedPoints.add(point);
             }
         }
