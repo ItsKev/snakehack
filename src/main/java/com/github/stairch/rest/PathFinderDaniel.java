@@ -80,22 +80,22 @@ public class PathFinderDaniel {
         PointDTO targetUP = new PointDTO();
         targetUP.setX(ownHead.getX());
         targetUP.setY(ownHead.getY()-1);
-        int up = pointRoomToMove(targetUP,allSnakes);
+        int up = pointRoomToMove(targetUP,allSnakes,ownHead);
         System.out.println("Up: " +up);
         PointDTO targetDown = new PointDTO();
         targetDown.setX(ownHead.getX());
         targetDown.setY(ownHead.getY()+1);
-        int down = pointRoomToMove(targetDown,allSnakes);
+        int down = pointRoomToMove(targetDown,allSnakes,ownHead);
         System.out.println("Down: " +down);
         PointDTO targetRight = new PointDTO();
         targetRight.setX(ownHead.getX()+1);
         targetRight.setY(ownHead.getY());
-        int right = pointRoomToMove(targetRight,allSnakes);
+        int right = pointRoomToMove(targetRight,allSnakes,ownHead);
         System.out.println("Right: " + right);
         PointDTO targetLeft = new PointDTO();
         targetLeft.setX(ownHead.getX()-1);
         targetLeft.setY(ownHead.getY());
-        int left = pointRoomToMove(targetLeft,allSnakes);
+        int left = pointRoomToMove(targetLeft,allSnakes,ownHead);
         System.out.println("Left: " + left);
 
         int max = Math.max(up, Math.max(down, Math.max(left, right)));
@@ -174,7 +174,7 @@ public class PathFinderDaniel {
         return true;
     }
 
-    public int pointRoomToMove(PointDTO target, List<SnakeDTO> allSnakes){
+    public int pointRoomToMove(PointDTO target, List<SnakeDTO> allSnakes, PointDTO ownHead){
         if(!pointIsFree(target,allSnakes)){
             return 0;
         }
@@ -185,11 +185,16 @@ public class PathFinderDaniel {
 
         PointDTO toCheck = new PointDTO();
 
+        int minX = (ownHead.getX()-10)>0 ? (ownHead.getX()-10) : 0;
+        int maxX = (ownHead.getX()+10)<fieldWidth ? (ownHead.getX()+10) : fieldWidth;
+        int minY = (ownHead.getY()-10)>0 ? (ownHead.getY()-10) : 0;
+        int maxY = (ownHead.getY()+10)<fieldHeight ? (ownHead.getY()+10) : fieldHeight;
+
         boolean changed = true;
         while(changed){
             changed = false;
-            for(int x = 0; x < fieldWidth; x++){
-                for(int y = 0; y < fieldHeight; y++){
+            for(int x = minX; x < maxX; x++){
+                for(int y = minY; y < maxY; y++){
                     toCheck.setX(x);
                     toCheck.setY(y);
                     if(!usedPoints.contains(toCheck)){
