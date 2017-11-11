@@ -50,11 +50,13 @@ public class SnakeService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/move")
-    public final Response move(final StartRequestDTO startRequestDTO) {
-        System.out.println(startRequestDTO);
+    public final Response move(final MoveRequestDTO moveRequestDTO) {
+        System.out.println(moveRequestDTO);
+        //todo: method -> Pathfinding..
 
         final MoveResponseDTO moveResponse = new MoveResponseDTO();
         moveResponse.setMove(Move.left);
+        //moveResponse.setMove(Pathfinding());
 
 
         final String responseBody = gson.toJson(moveResponse);

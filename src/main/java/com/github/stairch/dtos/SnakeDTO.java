@@ -106,7 +106,7 @@ public class SnakeDTO {
     @Override
     public String toString() {
         return "Snake [id=" + id + ", name=" + name + ", taunt=" + taunt + ", healthPoints=" + healthPoints
-                + ", coords=" + coords + "]";
+                + ", coords=" + this.getCoordsAsPoints().toString() + "]";
     }
 
     /*
