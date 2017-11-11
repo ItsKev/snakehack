@@ -37,7 +37,7 @@ public class SnakeService {
 
         final StartResponseDTO startResponse = new StartResponseDTO();
         startResponse.setColor("yellow");
-        startResponse.setHeadUrl(BASE_URI + "static/Banana.png");
+        startResponse.setHeadUrl("https://i.pinimg.com/originals/cd/29/a7/cd29a717a709e8a61ed69bf3f8d69df8.jpg");
         startResponse.setName("Banana Snake");
         startResponse.setTaunt("Ooooh Bananas!");
 
