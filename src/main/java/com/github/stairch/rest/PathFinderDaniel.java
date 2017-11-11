@@ -5,7 +5,9 @@ import com.github.stairch.dtos.SnakeDTO;
 import com.github.stairch.types.Move;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PathFinderDaniel {
 
@@ -72,24 +74,64 @@ public class PathFinderDaniel {
     public Move moveToFood(SnakeDTO ownSnake, PointDTO Food, List<SnakeDTO> allSnakes) {
         List<Move> movePrio = new ArrayList<>();
         List<Move> movePossibilitys = new ArrayList<>();
-        movePossibilitys.add(Move.right);
-        movePossibilitys.add(Move.down);
-        movePossibilitys.add(Move.left);
-        movePossibilitys.add(Move.up);
 
         PointDTO ownHead = ownSnake.getCoordinates().get(0);
 
+        PointDTO targetUP = new PointDTO();
+        targetUP.setX(ownHead.getX());
+        targetUP.setY(ownHead.getY()-1);
+        int up = pointRoomToMove(targetUP,allSnakes);
+        System.out.println("Up: " +up);
+        PointDTO targetDown = new PointDTO();
+        targetDown.setX(ownHead.getX());
+        targetDown.setY(ownHead.getY()+1);
+        int down = pointRoomToMove(targetDown,allSnakes);
+        System.out.println("Down: " +down);
+        PointDTO targetRight = new PointDTO();
+        targetRight.setX(ownHead.getX()+1);
+        targetRight.setY(ownHead.getY());
+        int right = pointRoomToMove(targetRight,allSnakes);
+        System.out.println("Right: " + right);
+        PointDTO targetLeft = new PointDTO();
+        targetLeft.setX(ownHead.getX()-1);
+        targetLeft.setY(ownHead.getY());
+        int left = pointRoomToMove(targetLeft,allSnakes);
+        System.out.println("Left: " + left);
+
+        int max = Math.max(up, Math.max(down, Math.max(left, right)));
+        if(up == max){
+            movePossibilitys.add(Move.up);
+        }
+        if(down == max){
+            movePossibilitys.add(Move.down);
+        }
+        if(right == max){
+            movePossibilitys.add(Move.right);
+        }
+        if(left == max){
+            movePossibilitys.add(Move.left);
+        }
+
+
         if(ownHead.getY()>Food.getY()){ //move up
-            movePrio.add(Move.up);
+            if(movePossibilitys.contains(Move.up)) {
+                movePrio.add(Move.up);
+            }
         }
         else if(ownHead.getY()<Food.getY()){ //move down
-            movePrio.add(Move.down);
+            if(movePossibilitys.contains(Move.down)) {
+                movePrio.add(Move.down);
+            }
         }
         if(ownHead.getX()>Food.getX()){ //move left
-            movePrio.add(Move.left);
+            if(movePossibilitys.contains(Move.left)) {
+                movePrio.add(Move.left);
+            }
         }
         else if(ownHead.getX()<Food.getX()){ //move right
-            movePrio.add(Move.right);
+            if(movePossibilitys.contains(Move.right)) {
+                movePrio.add(Move.right);
+            }
         }
 
         for(Move move : movePossibilitys){
@@ -132,8 +174,57 @@ public class PathFinderDaniel {
         return true;
     }
 
-    public boolean pointIsClosed(PointDTO target, List<SnakeDTO> allSnakes){
+    public int pointRoomToMove(PointDTO target, List<SnakeDTO> allSnakes){
+        if(!pointIsFree(target,allSnakes)){
+            return 0;
+        }
 
+        List<PointDTO> usedPoints = getOccupiedFields(allSnakes);
+        List<PointDTO> pointsOfTargetRoom = new ArrayList<>();
+        pointsOfTargetRoom.add(target);
+
+        PointDTO toCheck = new PointDTO();
+
+        boolean changed = true;
+        while(changed){
+            changed = false;
+            for(int x = 0; x < fieldWidth; x++){
+                for(int y = 0; y < fieldHeight; y++){
+                    toCheck.setX(x);
+                    toCheck.setY(y);
+                    if(!usedPoints.contains(toCheck)){
+                        if(!pointsOfTargetRoom.contains(toCheck)){
+                            boolean isneigbour = false;
+                            for(PointDTO point : pointsOfTargetRoom){
+                                if(isNeigbour(point, toCheck)){
+                                    isneigbour = true;
+                                }
+                            }
+                            if(isneigbour){
+                                changed = true;
+                                PointDTO add = new PointDTO();
+                                add.setY(toCheck.getY());
+                                add.setX(toCheck.getX());
+                                pointsOfTargetRoom.add(add);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return pointsOfTargetRoom.size();
+    }
+
+    private boolean isNeigbour(PointDTO n1, PointDTO n2){
+        if(n1.getX() == n2.getX()){
+            if(n1.getY() == n2.getY()+1 || n1.getY() == n2.getY()-1){
+                return true;
+            }
+        }else if(n1.getY() == n2.getY()) {
+            if (n1.getX() == n2.getX() + 1 || n1.getX() == n2.getX() - 1) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -142,7 +233,9 @@ public class PathFinderDaniel {
         List<PointDTO> occupiedPoints = new ArrayList<>();
         for (SnakeDTO snake : snakes) {
             for (PointDTO point : snake.getCoordinates()) {
-                occupiedPoints.add(point);
+                if(!point.equals(snake.getCoordinates().get(snake.getCoordinates().size()-1))) { //TODO: wenn mehrmals dann doch?
+                    occupiedPoints.add(point);
+                }
             }
         }
         return occupiedPoints;

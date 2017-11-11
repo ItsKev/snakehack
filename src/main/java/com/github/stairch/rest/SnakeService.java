@@ -36,10 +36,10 @@ public class SnakeService {
         System.out.println(startRequestDTO);
 
         final StartResponseDTO startResponse = new StartResponseDTO();
-        startResponse.setColor("black");
-        startResponse.setHeadUrl(BASE_URI + "static/head.png");
-        startResponse.setName("Kevs Snake");
-        startResponse.setTaunt("Meep meep");
+        startResponse.setColor("yellow");
+        startResponse.setHeadUrl(BASE_URI + "static/Banana.png");
+        startResponse.setName("Banana Snake");
+        startResponse.setTaunt("Ooooh Bananas!");
 
         startResponse.setHeadType(HeadType.getFang());
         startResponse.setTailType(TailType.getBlockbum());
@@ -54,7 +54,7 @@ public class SnakeService {
     public final Response move(String string) {
         MoveRequestDTO moveRequestDTO = this.getMoveRequestDTO(string);
 
-        PathFinder pathFinder = new PathFinder(moveRequestDTO.getWidth(), moveRequestDTO.getHeight());
+        PathFinderDaniel pathFinder = new PathFinderDaniel(moveRequestDTO.getWidth(), moveRequestDTO.getHeight());
 
         final MoveResponseDTO moveResponse = new MoveResponseDTO();
         SnakeDTO ownSnake = pathFinder.getOwnSnake(moveRequestDTO.getYou(), moveRequestDTO.getSnakes());
@@ -87,7 +87,6 @@ public class SnakeService {
         JsonArray food = json.get("food").getAsJsonArray();
         ArrayList<PointDTO> pointDTOS = new ArrayList<>();
         for (JsonElement jsonElement : food) {
-            System.out.println(jsonElement);
             JsonArray foodCoords = jsonElement.getAsJsonArray();
             PointDTO pointDTO = new PointDTO();
             pointDTO.setX(foodCoords.get(0).getAsInt());
