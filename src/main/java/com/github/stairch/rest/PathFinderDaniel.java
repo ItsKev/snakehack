@@ -15,11 +15,12 @@ public class PathFinderDaniel {
     private int fieldHeight;
     private boolean xTried = false;
     private boolean yTried = false;
+    String ownSnake;
 
-    public PathFinderDaniel(final int fieldWidth, final int fieldHeight){
+    public PathFinderDaniel(final int fieldWidth, final int fieldHeight, String ownSnake){
         this.fieldWidth = fieldWidth;
         this.fieldHeight = fieldHeight;
-
+        this.ownSnake = ownSnake;
     }
 
     public SnakeDTO getOwnSnake(String ownSnake, List<SnakeDTO> allSnakes){
@@ -102,11 +103,11 @@ public class PathFinderDaniel {
         if(up == max){
             movePossibilitys.add(Move.up);
         }
-        if(down == max){
-            movePossibilitys.add(Move.down);
-        }
         if(right == max){
             movePossibilitys.add(Move.right);
+        }
+        if(down == max){
+            movePossibilitys.add(Move.down);
         }
         if(left == max){
             movePossibilitys.add(Move.left);
@@ -233,16 +234,46 @@ public class PathFinderDaniel {
         return false;
     }
 
-    //TODO: schwanz weg?
+
     public List<PointDTO> getOccupiedFields(List<SnakeDTO> snakes) {
+        SnakeDTO ownSnake = getOwnSnake(this.ownSnake, snakes);
         List<PointDTO> occupiedPoints = new ArrayList<>();
         for (SnakeDTO snake : snakes) {
-            for (PointDTO point : snake.getCoordinates()) {
-                if(!point.equals(snake.getCoordinates().get(snake.getCoordinates().size()-1))) { //TODO: wenn mehrmals dann doch?
-                    occupiedPoints.add(point);
+            if(!snake.equals(ownSnake)){
+                if(ownSnake.getCoordinates().size() <= snake.getCoordinates().size()){
+                    List<PointDTO> possibleHeadmoves = getPossibleHeadmoves(snake.getCoordinates().get(0));
+                    for(PointDTO point : possibleHeadmoves){
+                        occupiedPoints.add(point);
+                    }
                 }
+            }
+            for (PointDTO point : snake.getCoordinates()) {
+                occupiedPoints.add(point);
             }
         }
         return occupiedPoints;
+    }
+
+    public List<PointDTO> getPossibleHeadmoves(PointDTO head){
+        PointDTO targetUP = new PointDTO();
+        targetUP.setX(head.getX());
+        targetUP.setY(head.getY()-1);
+        PointDTO targetDown = new PointDTO();
+        targetDown.setX(head.getX());
+        targetDown.setY(head.getY()+1);
+        PointDTO targetRight = new PointDTO();
+        targetRight.setX(head.getX()+1);
+        targetRight.setY(head.getY());
+        PointDTO targetLeft = new PointDTO();
+        targetLeft.setX(head.getX()-1);
+        targetLeft.setY(head.getY());
+
+        List<PointDTO> possiblemoves = new ArrayList<>();
+
+        possiblemoves.add(targetUP);
+        possiblemoves.add(targetDown);
+        possiblemoves.add(targetRight);
+        possiblemoves.add(targetLeft);
+        return possiblemoves;
     }
 }

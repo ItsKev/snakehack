@@ -54,7 +54,7 @@ public class SnakeService {
     public final Response move(String string) {
         MoveRequestDTO moveRequestDTO = this.getMoveRequestDTO(string);
 
-        PathFinderDaniel pathFinder = new PathFinderDaniel(moveRequestDTO.getWidth(), moveRequestDTO.getHeight());
+        PathFinderDaniel pathFinder = new PathFinderDaniel(moveRequestDTO.getWidth(), moveRequestDTO.getHeight(), moveRequestDTO.getYou());
 
         final MoveResponseDTO moveResponse = new MoveResponseDTO();
         SnakeDTO ownSnake = pathFinder.getOwnSnake(moveRequestDTO.getYou(), moveRequestDTO.getSnakes());
