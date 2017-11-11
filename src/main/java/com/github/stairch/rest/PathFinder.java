@@ -100,7 +100,9 @@ public class PathFinder {
 
     private Move moveY(PointDTO ownHead, PointDTO Food, List<SnakeDTO> allSnakes) {
         boolean isPositiv;
-        PointDTO nextY = ownHead;
+        PointDTO nextY = new PointDTO();
+        nextY.setX(ownHead.getX());
+        nextY.setY(ownHead.getY());
         if (Food.getY() - ownHead.getY() < 0) {
             nextY.setY(ownHead.getY() - 1);
             isPositiv = false;
@@ -137,7 +139,10 @@ public class PathFinder {
 
     private Move moveX(PointDTO ownHead, PointDTO Food, List<SnakeDTO> allSnakes) {
         boolean isPositiv;
-        PointDTO nextX = ownHead;
+        PointDTO nextX = new PointDTO();
+        nextX.setX(ownHead.getX());
+        nextX.setY(ownHead.getY());
+
         if(Food.getX() - ownHead.getX() < 0){
             nextX.setX(ownHead.getX()-1);
             isPositiv = false;
