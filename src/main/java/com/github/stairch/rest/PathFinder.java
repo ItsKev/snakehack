@@ -183,6 +183,24 @@ public class PathFinder {
         if(getOccupiedFields(allSnakes).contains(target)) {  //wenn eine lebende Snake auf dem Target Feld ist
             return false;
         }
+        int yCount = 0;
+        int xCount = 0;
+        for(int y = 0; y < this.fieldHeight; y++){
+            if(getOccupiedFields(allSnakes).contains(new PointDTO(target.getX(), y))){
+                yCount++;
+                if(yCount > 2) {
+                    for (int x = 0; x < this.fieldWidth; x++) {
+                        if (getOccupiedFields(allSnakes).contains(new PointDTO(x, target.getY()))) {
+                            xCount++;
+                            if(xCount > 2) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
         return true;
     }
 

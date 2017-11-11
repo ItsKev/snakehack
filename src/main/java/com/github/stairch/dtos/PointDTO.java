@@ -23,6 +23,11 @@ public class PointDTO {
         this.y = toConvert.get(1);
     }
 
+    public PointDTO(final int x, final int y){
+        this.x = x;
+        this.y = y;
+    }
+
     /**
      * @return the x
      */
