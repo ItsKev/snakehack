@@ -16,8 +16,9 @@ public final class MoveRequestDTO {
     private int turn;
 
     private List<SnakeDTO> snakes;
-    private List<List<Integer>> food;
-    // TODO: left out board for now.
+    private List<PointDTO> foods;
+    @SerializedName("dead_snakes")
+    private List<SnakeDTO> deadSnakes;
 
     /**
      * Default constructor.
@@ -111,37 +112,36 @@ public final class MoveRequestDTO {
     }
 
     /**
-     * Convenience getter as list of points.
-     *
-     * @return
-     */
-    public final List<PointDTO> getFoodAsPoints() {
-        return food.stream().map(PointDTO::new).collect(Collectors.toList());
-    }
-
-    /**
      * @return the food
      */
-    public final List<List<Integer>> getFood() {
-        return food;
+    public final List<PointDTO> getFood() {
+        return foods;
     }
 
     /**
      * @param food the food to set
      */
-    public final void setFood(final List<List<Integer>> food) {
-        this.food = food;
+    public final void setFood(final List<PointDTO> food) {
+        this.foods = food;
+    }
+
+    public List<SnakeDTO> getDeadSnakes() {
+        return deadSnakes;
+    }
+
+    public void setDeadSnakes(List<SnakeDTO> deadSnakes) {
+        this.deadSnakes = deadSnakes;
     }
 
     /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#toString()
-     */
+         * (non-Javadoc)
+         *
+         * @see java.lang.Object#toString()
+         */
     @Override
     public String toString() {
         return "MoveRequest [gameId=" + gameId + ", width=" + width + ", height=" + height + ", you=" + you + ", turn="
-                + turn + ", snakes=" + snakes + ", food=" + food + "]";
+                + turn + ", snakes=" + snakes + ", food=" + foods + "]";
     }
 
     /*
@@ -153,7 +153,7 @@ public final class MoveRequestDTO {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((food == null) ? 0 : food.hashCode());
+        result = prime * result + ((foods == null) ? 0 : foods.hashCode());
         result = prime * result + ((gameId == null) ? 0 : gameId.hashCode());
         result = prime * result + height;
         result = prime * result + ((snakes == null) ? 0 : snakes.hashCode());
@@ -177,10 +177,10 @@ public final class MoveRequestDTO {
         if (getClass() != obj.getClass())
             return false;
         MoveRequestDTO other = (MoveRequestDTO) obj;
-        if (food == null) {
-            if (other.food != null)
+        if (foods == null) {
+            if (other.foods != null)
                 return false;
-        } else if (!food.equals(other.food))
+        } else if (!foods.equals(other.foods))
             return false;
         if (gameId == null) {
             if (other.gameId != null)

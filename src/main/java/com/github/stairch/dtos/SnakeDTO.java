@@ -11,7 +11,7 @@ public class SnakeDTO {
     private String taunt;
     @SerializedName("health_points")
     private int healthPoints;
-    private List<List<Integer>> coords;
+    private List<PointDTO> coordinates;
 
     /**
      * Default constructor.
@@ -76,26 +76,17 @@ public class SnakeDTO {
     }
 
     /**
-     * Convenience getter as list of points.
-     *
-     * @return
+     * @return the coordinates
      */
-    public final List<PointDTO> getCoordsAsPoints() {
-        return coords.stream().map(PointDTO::new).collect(Collectors.toList());
+    public final List<PointDTO> getCoordinates() {
+        return coordinates;
     }
 
     /**
-     * @return the coords
+     * @param points the coordinates to set
      */
-    public final List<List<Integer>> getCoords() {
-        return coords;
-    }
-
-    /**
-     * @param points the coords to set
-     */
-    public final void setCoords(final List<List<Integer>> points) {
-        this.coords = points;
+    public final void setCoordinates(final List<PointDTO> points) {
+        this.coordinates = points;
     }
 
     /*
@@ -106,7 +97,7 @@ public class SnakeDTO {
     @Override
     public String toString() {
         return "Snake [id=" + id + ", name=" + name + ", taunt=" + taunt + ", healthPoints=" + healthPoints
-                + ", coords=" + this.getCoordsAsPoints().toString() + "]";
+                + ", coordinates=" + coordinates + "]";
     }
 
     /*
@@ -121,7 +112,7 @@ public class SnakeDTO {
         result = prime * result + healthPoints;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((coords == null) ? 0 : coords.hashCode());
+        result = prime * result + ((coordinates == null) ? 0 : coordinates.hashCode());
         result = prime * result + ((taunt == null) ? 0 : taunt.hashCode());
         return result;
     }
@@ -152,10 +143,10 @@ public class SnakeDTO {
                 return false;
         } else if (!name.equals(other.name))
             return false;
-        if (coords == null) {
-            if (other.coords != null)
+        if (coordinates == null) {
+            if (other.coordinates != null)
                 return false;
-        } else if (!coords.equals(other.coords))
+        } else if (!coordinates.equals(other.coordinates))
             return false;
         if (taunt == null) {
             if (other.taunt != null)
