@@ -24,7 +24,7 @@ public class SnakeService {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
-        return "yeaay, your starter snake is up and running :)";
+        return "My snake ist the best :D";
     }
 
     @POST
