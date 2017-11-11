@@ -68,7 +68,7 @@ public class SnakeService {
             moveResponse.setMove(Move.right);
         }
 
-
+        moveResponse.setTaunt("Ooooh Bananas!");
 
         final String responseBody = gson.toJson(moveResponse);
         return Response.status(Response.Status.OK).entity(responseBody).build();
